@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Forever With You 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(-45deg,#ff416c,#ff4b2b,#ff6a88,#ff99ac);
+  background-size:400% 400%;
+  animation:bgMove 8s infinite alternate;
+  color:white;
+  position:relative;
+}
+@keyframes bgMove{
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
+}
+
+/* 💍 Ring Box */
+.ring-box{
+  position:absolute;
+  width:200px;
+  height:150px;
+  background:#8b0000;
+  border-radius:15px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  cursor:pointer;
+  z-index:2;
+  box-shadow:0 0 25px rgba(0,0,0,0.6);
+  transition:0.8s;
+}
+.ring-lid{
+  position:absolute;
+  width:200px;
+  height:75px;
+  background:#a00000;
+  top:0;
+  border-radius:15px 15px 0 0;
+  transform-origin:top;
+  transition:0.8s;
+}
+.ring{
+  font-size:45px;
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.8s;
+  position:relative;
+}
+.ring-box.open .ring-lid{
+  transform:rotateX(120deg);
+}
+.ring-box.open .ring{
+  opacity:1;
+  transform:translateY(-25px);
+  animation:ringGlow 1.5s infinite alternate;
+}
+@keyframes ringGlow{
+  from{text-shadow:0 0 10px white;}
+  to{text-shadow:0 0 30px gold,0 0 50px white;}
+}
+
+/* ✨ Sparkles */
+.sparkle{
+  position:absolute;
+  font-size:14px;
+  pointer-events:none;
+  animation:sparkleAnim 1s ease-out forwards;
+}
+@keyframes sparkleAnim{
+  0%{opacity:1;transform:scale(0.5);}
+  100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.5);}
+}
+
+/* Card */
+.container{
+  display:none;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(20px);
+  padding:40px;
+  border-radius:25px;
+  width:360px;
+  text-align:center;
+  box-shadow:0 0 40px rgba(255,255,255,0.4);
+  z-index:1;
+  animation:fadeIn 2s ease-in-out;
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(40px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+h1{font-size:26px;}
+h2{margin:15px 0;}
+
+button{
+  padding:12px 25px;
+  border:none;
+  border-radius:30px;
+  font-size:16px;
+  cursor:pointer;
+  margin:10px;
+  transition:0.3s;
+}
+#yes{background:white;color:#ff2e63;}
+#yes:hover{transform:scale(1.1);}
+#no{background:black;color:white;position:absolute;}
+
+.photo{
+  width:220px;height:220px;margin:20px auto;border-radius:20px;
+  overflow:hidden;box-shadow:0 0 25px white;display:none;
+  animation:zoomIn 1.5s ease forwards;
+}
+.photo img{width:100%;height:100%;object-fit:cover;}
+@keyframes zoomIn{
+  from{transform:scale(0);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+
+#message{display:none;font-size:20px;margin-top:10px;}
+
+/* Fireworks */
+.firework{
+  position:absolute;width:8px;height:8px;border-radius:50%;
+  animation:explode 1.5s ease-out forwards;
+}
+@keyframes explode{
+  0%{transform:translate(0,0);opacity:1;}
+  100%{transform:translate(var(--x),var(--y));opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="ring-box" id="ringBox" onclick="openRing()">
+  <div class="ring-lid"></div>
+  <div class="ring" id="ring">💍</div>
+</div>
+
+<div class="container" id="mainContent">
+<h1>Will You Marry Me? 💖</h1>
+<button id="yes" onclick="sayYes()">YES 💕</button>
+<button id="no" onmouseover="moveNo()">NO 😜</button>
+
+<div class="photo" id="photo">
+  <img src="c:\\Users\\Admin\\Pictures\\Android\\images.jpg">
+</div>
+<div id="message">💖 You Said YES! Forever Starts Now 💍❤️</div>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="c:\\Users\\Admin\\Pictures\\Android\\song.mp3.mpeg" type="audio/mpeg">
+</audio>
+
+<script>
+
+const music=document.getElementById("bgMusic");
+
+/* 💍 Open Ring */
+function openRing(){
+  const box=document.getElementById("ringBox");
+  box.classList.add("open");
+
+  music.volume=0;
+  music.play();
+  fadeInMusic();
+
+  sparkleEffect();
+
+  setTimeout(()=>{
+    box.style.display="none";
+    document.getElementById("mainContent").style.display="block";
+  },1800);
+}
+
+/* ✨ Sparkle Around Ring */
+function sparkleEffect(){
+  const ring=document.getElementById("ring");
+  for(let i=0;i<20;i++){
+    let s=document.createElement("div");
+    s.className="sparkle";
+    s.innerHTML="✨";
+    s.style.left=ring.offsetLeft+40+"px";
+    s.style.top=ring.offsetTop+20+"px";
+
+    let angle=Math.random()*360;
+    let distance=Math.random()*60+20;
+    s.style.setProperty('--x',Math.cos(angle)*distance+"px");
+    s.style.setProperty('--y',Math.sin(angle)*distance+"px");
+
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),1000);
+  }
+}
+
+/* Smooth Music */
+function fadeInMusic(){
+  let vol=0;
+  let fade=setInterval(()=>{
+    if(vol<0.5){vol+=0.02;music.volume=vol;}
+    else clearInterval(fade);
+  },200);
+}
+
+/* Dramatic Boost */
+function dramaticMusicBoost(){
+  let boost=setInterval(()=>{
+    if(music.volume<1){music.volume+=0.02;}
+    else clearInterval(boost);
+  },150);
+}
+
+/* Fireworks */
+function launchFireworks(){
+  for(let i=0;i<120;i++){
+    let f=document.createElement("div");
+    f.className="firework";
+    f.style.left=window.innerWidth/2+"px";
+    f.style.top=window.innerHeight/2+"px";
+    let angle=Math.random()*360;
+    let distance=Math.random()*300+50;
+    f.style.setProperty('--x',Math.cos(angle)*distance+"px");
+    f.style.setProperty('--y',Math.sin(angle)*distance+"px");
+    f.style.background="hsl("+Math.random()*360+",100%,50%)";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1500);
+  }
+}
+
+function moveNo(){
+  let x=Math.random()*(window.innerWidth-100);
+  let y=Math.random()*(window.innerHeight-50);
+  let btn=document.getElementById("no");
+  btn.style.left=x+"px";
+  btn.style.top=y+"px";
+}
+
+function sayYes(){
+  document.getElementById("photo").style.display="block";
+  document.getElementById("message").style.display="block";
+  document.getElementById("yes").style.display="none";
+  document.getElementById("no").style.display="none";
+  dramaticMusicBoost();
+  launchFireworks();
+}
+
+
+</script>
+</body>
+</html>
